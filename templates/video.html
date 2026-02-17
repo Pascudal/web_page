@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="Videopleer for observing your inner place condition. You're welcome!">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS Video Streaming</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        video {
+            width: 640px;
+            height: 360px;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <video id="video" controls></video>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
+    <script>
+        const video = document.getElementById('video');
+        const videoSrc = 'E:/Programs/Python/Proj/HLS/static/videos/output.m3u8';
+
+        // Check if HLS.js is supported
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            // For browsers like Safari that support HLS natively
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
+        } else {
+            alert('This browser does not support HLS streaming.');
+        }
+    </script>
+    <div>
+        <p><a href="/"> Вернуться </a></p>
+    </div>
+</body>
+</html>
